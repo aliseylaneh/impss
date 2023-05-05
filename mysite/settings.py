@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import sys
+from dotenv import load_dotenv
 
+load_dotenv()
 sys.setrecursionlimit(4000)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,18 +33,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'account.apps.AccountConfig',
-    'main.apps.MainConfig',
-    'reports.apps.ReportsConfig',
     'rest_framework',
     'import_export',
-    'django.contrib.humanize'
+    'django.contrib.humanize',
+    'account',
+    'main',
+    'reports',
 ]
 
 AUTH_USER_MODEL = 'account.User'
@@ -83,12 +85,12 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'prison_oms',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': '03f2d3026c'
+        'ENGINE': os.getenv('DATABASE_ENGINE'),
+        'NAME': os.getenv('DATABASE_NAME'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD')
     }
 }
 # Password validation
@@ -125,10 +127,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '')
+STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR + '/static/'
+    BASE_DIR + 'static/'
 ]
 
 # LOGGING = {

@@ -6,8 +6,6 @@ from jalali_date import date2jalali, datetime2jalali
 from django.utils import timezone
 from account.models import User
 import pickle
-import pytz
-from abc import ABC
 
 
 class Province(models.Model):

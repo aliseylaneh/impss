@@ -23,8 +23,8 @@ urlpatterns = [
     path('time-deliver-report', views.time_deliver_report, name='time-deliver-report'),
     path('time-dsearch-report', csrf_exempt(views.time_dsearch_report), name='time-dsearch-sreport'),
     path('request-time-search', csrf_exempt(views.request_time_search), name='request-time-search'),
-    path('group-report', views.group_report, name='group-report'),
-    path('group-search-report', csrf_exempt(views.group_search_report), name='group-search-report'),
+    # path('group-report', views.group_report, name='group-report'),
+    # path('group-search-report', csrf_exempt(views.group_search_report), name='group-search-report'),
     # path('por_xls', csrf_exempt(views.por_xls), name='por_xls')
 
 ]

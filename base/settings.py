@@ -45,7 +45,23 @@ INSTALLED_APPS = [
     'account',
     'main',
     'reports',
+    'drf_spectacular'
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'IMPSS',
+    'DESCRIPTION': 'Integrated Management Prison Supplier System',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -124,39 +140,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '')
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR + 'static/'
 ]
-
-# LOGGING = {
-#     'version': 1,
-#     'loggers': {
-#         'django': {
-#             'handlers': ['file'],
-#             'level': 'DEBUG'
-#         }
-#     },
-#     'handlers': {
-#         'file': {
-#             'level': 'INFO',
-#             'class': 'logging.FileHandler',
-#             'filename': './logs/debug.log',
-#             'formatter': 'userCrud',
-#             'encoding': 'UTF-8'
-#
-#         }
-#     },
-#     'formatters': {
-#         'userCrud': {
-#             'format': u'{levelname}, {message}, TIMESTAMP: [{asctime}], MODULE:[{module}], PROCESS:[{process:d}], THREAD:[{thread:d}]',
-#             'style': '{'
-#         }
-#     }
-# }

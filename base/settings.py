@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'reports',
     'drf_spectacular'
 ]
+# REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',

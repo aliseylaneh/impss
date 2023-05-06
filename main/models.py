@@ -66,7 +66,7 @@ class Category(models.Model):
         return self.name
 
 
-class Unit(models.TextChoices):
+class UnitTypeChoices(models.TextChoices):
     each = 'عدد'
     box = 'کارتن'
     kg = 'کیلوگرم'
@@ -79,7 +79,8 @@ class Product(models.Model):
     name = models.CharField(max_length=50, null=True)
     category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
     ordered_quantity = models.BigIntegerField(null=True, default=0)
-    based_quantity = models.CharField(max_length=20, null=True, choices=Unit.choices, default=Unit.each)
+    based_quantity = models.CharField(max_length=20, null=True, choices=UnitTypeChoices.choices,
+                                      default=UnitTypeChoices.each)
     description = models.CharField(max_length=255, null=True)
     tax = models.FloatField(default=9)
     profit = models.FloatField(default=3)

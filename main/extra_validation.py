@@ -1,23 +1,21 @@
 import pickle
 
-import environment as environment
-
-from main.models import Unit, Supplier, Category
+from main.models import UnitTypeChoices, Supplier
 
 
-def getProductUnit(str):
+def getProductUnitTypeChoices(str):
     if str == 'Gr':
-        return Unit.gr
+        return UnitTypeChoices.gr
     elif str == 'Kg':
-        return Unit.kg
+        return UnitTypeChoices.kg
     elif str == 'Box':
-        return Unit.box
+        return UnitTypeChoices.box
     elif str == 'Each':
-        return Unit.each
+        return UnitTypeChoices.each
     elif str == 'Tn':
-        return Unit.tn
+        return UnitTypeChoices.tn
     elif str == 'Meter':
-        return Unit.meter
+        return UnitTypeChoices.meter
 
 
 def deactivated_suppliers():
@@ -74,5 +72,3 @@ def check_manager_signatures(req_signature):
     if user_signatures['commercial_manager'] is None:
         return False
     return True
-
-

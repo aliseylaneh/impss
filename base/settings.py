@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'account',
     'main',
     'reports',
-    'drf_spectacular'
+    'drf_spectacular',
+    'django_filters'
 ]
 # REST Framework settings
 REST_FRAMEWORK = {

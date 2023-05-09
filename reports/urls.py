@@ -2,10 +2,12 @@ from django.urls import path
 from reports import views
 from django.views.decorators.csrf import csrf_exempt
 
+from reports.views import RequestSearchView
+
 app_name = 'reports'
 
 urlpatterns = [
-
+    path('api/request/search/<int:request_id>', RequestSearchView.as_view(), name='request-search'),
     path('report', views.report_home, name='report'),
     path('category_report', csrf_exempt(views.search_category), name='category_report'),
     path('review_request_report', csrf_exempt(views.review_request), name='review_request_report'),
@@ -23,8 +25,4 @@ urlpatterns = [
     path('time-deliver-report', views.time_deliver_report, name='time-deliver-report'),
     path('time-dsearch-report', csrf_exempt(views.time_dsearch_report), name='time-dsearch-sreport'),
     path('request-time-search', csrf_exempt(views.request_time_search), name='request-time-search'),
-    # path('group-report', views.group_report, name='group-report'),
-    # path('group-search-report', csrf_exempt(views.group_search_report), name='group-search-report'),
-    # path('por_xls', csrf_exempt(views.por_xls), name='por_xls')
-
 ]

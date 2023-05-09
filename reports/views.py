@@ -1,34 +1,16 @@
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.db.models import Sum
-# Create your views here.
-from account.decorators import allowed_users
-from account.models import UserProfile
-from main.models import Category, Order
-import csv
-import io
 import json
-import logging
-import unittest
-from datetime import date
-from datetime import datetime
-from django.db.models import Q, Avg, Count
-import django
+
 import jdatetime
-import xlsxwriter
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import Group
-from django.core.handlers import exception
-from django.core.paginator import Paginator
-from django.db import IntegrityError
-from django.http import JsonResponse, HttpResponseNotFound, HttpResponse, FileResponse
-from django.urls import reverse
-from io import StringIO
-from datetime import datetime
+from django.db.models import Avg, Count
+from django.db.models import Sum
+from django.http import JsonResponse
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics
 
 from account.decorators import *
+# Create your views here.
+from account.models import UserProfile
 from main.models import *
 
 
@@ -359,6 +341,14 @@ def request_status_report(request):
     return render(request, 'reports/request_status_report.html', context)
 
 
+class RequestSearchView(generics.ListAPIView):
+    queryset = Request.objects.all()
+    filter_backends = [DjangoFilterBackend]
+
+    def list(self, request, *args, **kwargs):
+        pass
+
+
 @login_required(login_url='account:login')
 def search_request(request):
     if request.method == 'POST':
@@ -652,14 +642,12 @@ def time_dsearch_report(request):
                     deliver_dates.append(
                         {'request_date': request_r.get_created_date,
                          'supplier_name': supplier['supplier__company_name'],
-                         'recieved_date': deliver_date.get_recieved_date if deliver_date.received_date is not None else 'بدون تاریخ',
+                         'received_date': deliver_date.get_recieved_date if deliver_date.received_date is not None else 'بدون تاریخ',
                          'final_date': request_r.get_acceptations_date if request_r.acceptation_date is not None else 'بدون تاریخ',
                          'avg_receive_requested': avg_receive_requested, 'avg_receive_final': avg_receive_final,
                          'avg_requested_final': avg_requested_final})
                     if deliver_date.received_date is not None:
                         supplier_deliver_count += 1
-
-
             except DeliverDate.DoesNotExist:
                 deliver_dates.append(
                     {'request_date': request_r.get_created_date,
@@ -669,35 +657,6 @@ def time_dsearch_report(request):
                      'avg_receive_requested': 0, 'avg_receive_final': 0,
                      'avg_requested_final': 0})
 
-    # deliver_quantity = 0
-    # price = 0
-    # if len(orders) != 0:
-    #     for order in orders:
-    #         order_dd = DeliverDate.objects.filter(request=order.request, supplier=order.supplier).order_by(
-    #             '-received_date')
-    #         if len(order_dd) != 0:
-    #             if order_dd[0].status == 1:
-    #                 supplierproduct = \
-    #                     SupplierProduct.objects.filter(request=order.request, supplier=order.supplier,
-    #                                                    brand=order.brand,
-    #                                                    product=order.product).order_by('-created_date')
-    #                 if len(supplierproduct) == 0:
-    #                     supplierproduct = SupplierProduct.objects.filter(supplier=order.supplier,
-    #                                                                      brand=order.brand,
-    #                                                                      product=order.product).order_by(
-    #                         '-created_date')
-    #                     if len(supplierproduct) != 0:
-    #                         price += supplierproduct[0].price * order.delivered_quantity
-    #                 else:
-    #                     price += supplierproduct[0].price * order.delivered_quantity
-    #                 deliver_quantity += order.delivered_quantity
-    #                 total_quantity += order.delivered_quantity
-    #                 total_price += price
-    #     prisons_r.append({
-    #         'delivered_quantity': deliver_quantity,
-    #         'orders_price': price
-    #
-    #     })
     report_date = datetime2jalali(timezone.now()).strftime("%X") + " " + date2jalali(timezone.now()).strftime(
         "%Y/%m/%d")
 

@@ -1,6 +1,4 @@
 from datetime import datetime
-from enum import Enum
-from persiantools.jdatetime import JalaliDateTime
 from django.db import models
 from jalali_date import date2jalali, datetime2jalali
 from django.utils import timezone

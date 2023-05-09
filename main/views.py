@@ -1,29 +1,23 @@
 import csv
-import io
 import json
 import logging
-import unittest
-from datetime import date
-from django.db.models import Q
-import django
+
 import jdatetime
-import xlsxwriter
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
-from django.core.handlers import exception
 from django.core.paginator import Paginator
 from django.db import IntegrityError
-from django.http import JsonResponse, HttpResponseNotFound, HttpResponse, FileResponse
+from django.db.models import Q
+from django.http import JsonResponse, HttpResponse
 from django.urls import reverse
-from io import StringIO
 
 from account.decorators import *
 from main.models import *
-from .extra_validation import deactivated_suppliers, checkStatus, getProductUnit, set_user_signatures, \
+from .extra_validation import deactivated_suppliers, checkStatus, getProductUnitTypeChoices, set_user_signatures, \
     check_user_signatures, check_manager_signatures
 from .serializers import *
-from .templatetags.main_custom_tags import multiply_price, tax_final_price, tax_price
+from .templatetags.main_custom_tags import multiply_price, tax_price
 
 logger = logging.getLogger('django')
 
@@ -1241,7 +1235,8 @@ def add_product(request):
         status = request.POST.get('status-selector')
         tax = request.POST.get('tax')
         product = Product.objects.create(name=name, description=description, profit=profit, tax=tax,
-                                         based_quantity=getProductUnit(quantity_unit), status=checkStatus(status))
+                                         based_quantity=getProductUnitTypeChoices(quantity_unit),
+                                         status=checkStatus(status))
 
         category = Category.objects.get(name=category)
         category.product_set.add(product)
@@ -1249,7 +1244,7 @@ def add_product(request):
         return redirect('main:products')
     if request.method == "GET":
         categories = Category.objects.all()
-        units = Unit.choices
+        units = UnitTypeChoices.choices
         return render(request, 'main/site_admin/register_product.html', {'categories': categories, 'units': units})
 
 
@@ -1258,7 +1253,7 @@ def add_product(request):
 def get_product(request, pk):
     product = Product.objects.get(id=pk)
     categories_g = Category.objects.all()
-    units = Unit.choices
+    units = UnitTypeChoices.choices
     context = {
         'product_e': product, 'categories': categories_g, 'units': units
     }
@@ -1280,7 +1275,7 @@ def update_product(request):
 
         product = Product.objects.get(id=product_id)
         if name != '': product.name = name
-        if quantity_unit != '': product.based_quantity = getProductUnit(quantity_unit)
+        if quantity_unit != '': product.based_quantity = getProductUnitTypeChoices(quantity_unit)
         if description != '': product.description = description
         if profit != '': product.profit = profit
         if tax != '': product.tax = tax

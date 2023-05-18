@@ -2,15 +2,14 @@
 venv
 static/
 logs
-
-
+.vscode/*
 __pycache__/
 *.py[cod]
 *$py.class
-
+**/*.pyc
 # C extensions
 *.so
-
+*.cpython-*.pyc
 # Distribution / packaging
 .Python
 build/
